@@ -19,6 +19,7 @@ err()  { printf '[ERROR] %s\n' "$*" >&2; exit 1; }
 ########################################
 USE_SHELL_CONFIG=false
 INSTALL_MODE="symlink"
+USE_TERMINAL_DOTS=false
 
 ########################################
 # Utils
@@ -51,11 +52,7 @@ check_supported_distro() {
 ########################################
 ask_shell_config() {
     read -rp "Use provided .bashrc and Starship config? [y/N]: " ans
-    if [[ "$ans" =~ ^[Yy]$ ]]; then
-        USE_SHELL_CONFIG=true
-    else
-        USE_SHELL_CONFIG=false
-    fi
+    [[ "$ans" =~ ^[Yy]$ ]] && USE_SHELL_CONFIG=true
 }
 
 ask_install_mode() {
@@ -65,27 +62,39 @@ ask_install_mode() {
     echo "2) Copy"
     read -rp "Choose [1/2]: " ans
 
-    if [[ "$ans" == "2" ]]; then
-        INSTALL_MODE="copy"
-    else
-        INSTALL_MODE="symlink"
-    fi
+    [[ "$ans" == "2" ]] && INSTALL_MODE="copy"
 
     if [[ "$INSTALL_MODE" == "symlink" ]]; then
         log "Symlink mode selected."
-        log "Configuration files will depend on this repository path:"
+        log "Configs will reference:"
         log "$SCRIPT_DIR"
     fi
+}
+
+ask_terminal_dots() {
+    read -rp "Use provided Kitty and Rofi configs? [y/N]: " ans
+    [[ "$ans" =~ ^[Yy]$ ]] && USE_TERMINAL_DOTS=true
 }
 
 ########################################
 # Install Helpers
 ########################################
-install_arch() {
+install_arch_repo_then_aur() {
+    local pkg_repo="$1"
+    local pkg_aur="${2:-$1}"
+
+    # Try pacman first
+    if $SUDO pacman -Sy --needed --noconfirm "$pkg_repo" 2>/dev/null; then
+        log "Installed $pkg_repo via pacman."
+        return 0
+    fi
+
+    warn "Pacman failed. Trying AUR..."
+
     if cmd yay; then
-        yay -S --needed --noconfirm "$@"
+        yay -S --needed --noconfirm "$pkg_aur"
     elif cmd paru; then
-        paru -S --needed --noconfirm "$@"
+        paru -S --needed --noconfirm "$pkg_aur"
     else
         err "No AUR helper found (yay/paru required)."
     fi
@@ -105,7 +114,7 @@ install_mangowc() {
     fi
 
     if [[ "$(detect_distro)" == "arch" ]]; then
-        install_arch mangowc-git
+        install_arch_repo_then_aur mangowc mangowc-git
     else
         install_fedora mangowc
     fi
@@ -139,7 +148,7 @@ install_noctalia() {
     fi
 
     if [[ "$(detect_distro)" == "arch" ]]; then
-        install_arch noctalia-shell
+        install_arch_repo_then_aur noctalia-shell
     else
         if ! rpm -q terra-release >/dev/null 2>&1; then
             $SUDO dnf install -y \
@@ -212,10 +221,16 @@ install_path() {
     fi
 }
 
+########################################
+# Link Configs
+########################################
 link_configs() {
     install_path "$SCRIPT_DIR/mango" "$HOME/.config/mango"
-    install_path "$SCRIPT_DIR/kitty" "$HOME/.config/kitty"
-    install_path "$SCRIPT_DIR/rofi" "$HOME/.config/rofi"
+
+    if [[ "$USE_TERMINAL_DOTS" == "true" ]]; then
+        install_path "$SCRIPT_DIR/kitty" "$HOME/.config/kitty"
+        install_path "$SCRIPT_DIR/rofi" "$HOME/.config/rofi"
+    fi
 
     if [[ "$USE_SHELL_CONFIG" == "true" ]]; then
         install_path "$SCRIPT_DIR/starship.toml" "$HOME/.config/starship.toml"
@@ -228,6 +243,7 @@ link_configs() {
 main() {
     check_supported_distro
     ask_shell_config
+    ask_terminal_dots
     ask_install_mode
 
     install_mangowc
