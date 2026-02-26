@@ -128,7 +128,7 @@ install_mangowc() {
 # Starship
 ########################################
 install_starship() {
-    [[ "$USE_SHELL_CONFIG" == "true" ]] || return
+    [[ "$USE_SHELL_CONFIG" == "true" ]] || return 0
 
     if cmd starship; then
         return
@@ -139,7 +139,7 @@ install_starship() {
 }
 
 install_bashrc() {
-    [[ "$USE_SHELL_CONFIG" == "true" ]] || return
+    [[ "$USE_SHELL_CONFIG" == "true" ]] || return 0
     install_path "$SCRIPT_DIR/.bashrc" "$HOME/.bashrc"
 }
 
@@ -177,11 +177,11 @@ install_sddm_astronaut() {
     if [[ -n "$current_dm" ]]; then
         if ! cmd sddm; then
             read -rp "Install SDDM alongside existing DM? [y/N]: " ans
-            [[ "$ans" =~ ^[Yy]$ ]] || return
+            [[ "$ans" =~ ^[Yy]$ ]] || return 0
         fi
     else
         read -rp "No display manager found. Install SDDM? [y/N]: " ans
-        [[ "$ans" =~ ^[Yy]$ ]] || return
+        [[ "$ans" =~ ^[Yy]$ ]] || return 0
     fi
 
     if [[ "$(detect_distro)" == "arch" ]]; then
