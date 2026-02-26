@@ -146,7 +146,7 @@ install_pkgs() {
 install_dependencies() {
     local pm="$1"
     log "Installing MangoWC dependencies ($pm)"
-    install_pkgs "$pm" git curl meson ninja-build cmake pkg-config
+    install_pkgs "$pm" git curl meson ninja cmake pkg-config
 }
 
 ########################################
