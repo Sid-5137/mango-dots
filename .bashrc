@@ -144,7 +144,7 @@ alias home='cd ~'
 alias cd..='cd ..'
 alias ..='cd ..'
 
- ...='cd ../..'
+alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
@@ -240,7 +240,7 @@ alias docker-clean=' \
   docker network prune -f ; \
   docker volume prune -f '
 
-alias src="cd $HOME/mango-dots/mango"
+alias src="cd $HOME/mango-dots/"
 alias linutil="curl -fsSL christitus.com/linux | sh"
 alias activate='conda activate'
 alias deactivate='conda deactivate'
