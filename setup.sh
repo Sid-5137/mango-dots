@@ -5,7 +5,11 @@ set -Eeuo pipefail
 # Paths
 ########################################
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo '')"
+
+command_exists() { command -v "$1" >/dev/null 2>&1; }
+SUDO="$(command_exists sudo && echo sudo || echo '')"
+
+PKG_CACHE_READY=0
 
 ########################################
 # Logging
@@ -13,6 +17,8 @@ SUDO="$(command -v sudo >/dev/null 2>&1 && echo sudo || echo '')"
 log()  { printf '[INFO] %s\n' "$*"; }
 warn() { printf '[WARN] %s\n' "$*"; }
 err()  { printf '[ERROR] %s\n' "$*" >&2; exit 1; }
+
+trap 'err "Command failed at line $LINENO: $BASH_COMMAND"' ERR
 
 ########################################
 # User Preferences
@@ -24,7 +30,28 @@ USE_TERMINAL_DOTS=false
 ########################################
 # Utils
 ########################################
-cmd() { command -v "$1" >/dev/null 2>&1; }
+cmd() { command_exists "$1"; }
+
+ensure_pkg_metadata() {
+    [[ "$PKG_CACHE_READY" -eq 1 ]] && return
+    local distro="$1"
+    log "Refreshing package metadata"
+    if [[ "$distro" == "arch" ]]; then
+        $SUDO pacman -Sy --noconfirm
+    else
+        $SUDO dnf makecache
+    fi
+    PKG_CACHE_READY=1
+}
+
+package_exists() {
+    local distro="$1" package="$2"
+    if [[ "$distro" == "arch" ]]; then
+        pacman -Si "$package" >/dev/null 2>&1
+    else
+        dnf info "$package" >/dev/null 2>&1
+    fi
+}
 
 detect_distro() {
     if [[ -f /etc/os-release ]]; then
@@ -87,16 +114,20 @@ install_arch_repo_then_aur() {
     local pkg_repo="$1"
     local pkg_aur="${2:-$1}"
 
-    # Try pacman first
-    if $SUDO pacman -Sy --needed --noconfirm "$pkg_repo" 2>/dev/null; then
+    ensure_pkg_metadata "arch"
+
+    # Try official repos first
+    if package_exists "arch" "$pkg_repo"; then
+        log "Found $pkg_repo in official repos, installing..."
+        $SUDO pacman -S --needed --noconfirm "$pkg_repo"
         log "Installed $pkg_repo via pacman."
         return 0
     fi
 
-    warn "Pacman failed. Trying AUR..."
+    warn "$pkg_repo not found in official repos. Trying AUR..."
 
     if cmd yay; then
-        yay -S --needed --noconfirm "$pkg_aur"
+        yay -S --needed --noconfirm --answerdiff=None --answerclean=None "$pkg_aur"
     elif cmd paru; then
         paru -S --needed --noconfirm "$pkg_aur"
     else
@@ -118,7 +149,8 @@ install_mangowc() {
     fi
 
     if [[ "$(detect_distro)" == "arch" ]]; then
-        $SUDO pacman -Sy --needed --noconfirm vulkan-headers cmake
+        ensure_pkg_metadata "arch"
+        $SUDO pacman -S --needed --noconfirm vulkan-headers cmake
         install_arch_repo_then_aur mangowc
     else
         install_fedora vulkan-headers cmake
@@ -187,7 +219,8 @@ install_sddm_astronaut() {
     fi
 
     if [[ "$(detect_distro)" == "arch" ]]; then
-        $SUDO pacman -Sy --needed --noconfirm sddm
+        ensure_pkg_metadata "arch"
+        $SUDO pacman -S --needed --noconfirm sddm
     else
         install_fedora sddm
     fi
