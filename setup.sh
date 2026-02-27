@@ -119,7 +119,7 @@ install_mangowc() {
 
     if [[ "$(detect_distro)" == "arch" ]]; then
         $SUDO pacman -Sy --needed --noconfirm vulkan-headers cmake
-        install_arch_repo_then_aur mangowc mangowc-git
+        install_arch_repo_then_aur mangowc
     else
         install_fedora vulkan-headers cmake
         install_fedora mangowc
