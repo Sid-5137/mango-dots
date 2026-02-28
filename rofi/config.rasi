@@ -14,5 +14,7 @@ configuration {
 }
 
 //@theme "~/.config/rofi/themes/catppuccin-lavrent-mocha.rasi"
-@theme "~/.config/rofi/themes/tokyo-night-simple.rasi"
+//@theme "~/.config/rofi/themes/tokyo-night-simple.rasi"
+@theme "~/.config/rofi/themes/rounded_nord.rasi"
+//@theme "~/.config/rofi/themes/new-nord.rasi"
 //@theme "/usr/share/rofi/themes/gruvbox-dark-hard.rasi"
