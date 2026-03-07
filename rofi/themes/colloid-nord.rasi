@@ -1,5 +1,5 @@
 /**
- * Colloid Dark Nord Rofi Theme
+ * Colloid Dark Nord – Sleek Edition
  */
 
 * {
@@ -20,7 +20,7 @@
     foreground: @text-muted;
     background-color: transparent;
 
-    highlight: underline bold #ECEFF4;
+    highlight: bold underline #ECEFF4;
 
     transparent: rgba(36,41,50,0);
 }
@@ -29,40 +29,43 @@ window {
     location: center;
     anchor: center;
 
-    /* allows compositor blur */
-    background-color: rgba(36,41,50,0.55);
+    background-color: rgba(36,41,50,0.60);
 
-    padding: 10px;
-    border: 0px;
-    border-radius: 10px;
+    padding: 14px;
+    border-radius: 14px;
 
-    width: 500px;
-    spacing: 0;
+    width: 520px;
+
+    border: 1px;
+    border-color: rgba(129,161,193,0.15);
+
     children: [mainbox];
-    orientation: horizontal;
 }
 
 mainbox {
-    spacing: 0;
-    children: [ inputbar, message, listview ];
+    spacing: 8px;
+    children: [inputbar, message, listview];
 }
 
 message {
+    padding: 6px 10px;
+    border-radius: 8px;
+
     color: @base;
-    padding: 5;
-    border: 0px 2px 2px 2px;
-    border-color: @accent-blue;
     background-color: @accent-cyan;
 }
 
 inputbar {
-    color: @text;
-    padding: 11px;
-    background-color: @panel;
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background-color: rgba(43,48,59,0.90);
 
     border: 1px;
-    border-radius: 10px 10px 0px 0px;
-    border-color: @accent-blue;
+    border-color: rgba(129,161,193,0.25);
+
+    color: @text;
 }
 
 entry, prompt, case-indicator {
@@ -71,32 +74,45 @@ entry, prompt, case-indicator {
 }
 
 prompt {
-    margin: 0px 1em 0em 0em;
+    margin: 0px 10px 0px 0px;
 }
 
 listview {
-    padding: 8px;
-    border-radius: 0px 0px 10px 10px;
-    border: 0px 1px 1px 1px;
-    border-color: @accent-blue;
+    padding: 6px;
 
-    /* semi transparent for blur */
-    background-color: rgba(36,41,50,0.65);
+    border-radius: 10px;
+
+    background-color: rgba(36,41,50,0.75);
+
+    border: 1px;
+    border-color: rgba(129,161,193,0.18);
+
+    spacing: 4px;
 
     dynamic: false;
 }
 
 element {
-    padding: 4px;
-    border-radius: 6px;
+    padding: 8px 10px;
+
+    border-radius: 8px;
+
     background-color: transparent;
 
     color: @text;
+
+    spacing: 10px;
 }
 
 element selected.normal {
-    background-color: @accent-blue;
-    text-color: #1E222A;
+    background-color: rgba(129,161,193,0.22);
+
+    border: 1px;
+    border-radius: 8px;
+
+    border-color: @accent-blue;
+
+    text-color: @text;
 }
 
 element-text, element-icon {
@@ -105,13 +121,18 @@ element-text, element-icon {
 }
 
 button {
-    padding: 6px;
-    color: @foreground;
-    horizontal-align: 0.5;
+    padding: 6px 10px;
 
-    border: 2px 0px 2px 2px;
-    border-radius: 6px 0px 0px 6px;
-    border-color: @accent-blue;
+    border-radius: 8px;
+
+    border: 1px;
+    border-color: rgba(129,161,193,0.25);
+
+    color: @foreground;
+
+    background-color: rgba(43,48,59,0.85);
+
+    horizontal-align: 0.5;
 }
 
 button selected normal {
