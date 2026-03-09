@@ -2,7 +2,7 @@
 /* Author: Newman Sanchez (https://github.com/newmanls) */
 
 * {
-    font:   "JetBrainsMono Nerd Font Mono 10";
+    font:   "JetBrainsMono Nerd Font Mono 11";
 
     nord0:     #2e3440;
     nord1:     #3b4252;

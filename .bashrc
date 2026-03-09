@@ -30,7 +30,7 @@ fi
 # ------------------------------------------------------------------------------
 
 # Setup custom PATH
-export PATH="$HOME/.local/bin:$HOME/.local/share:$HOME/.cargo/bin:$HOME/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.local/share/flatpak/exports/bin:/var/lib/flatpak/exports/bin:$PATH"
 
 # Set up XDG Base Directory specification folders
 export XDG_DATA_HOME="$HOME/.local/share"
@@ -592,3 +592,9 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# Auto start ssh-agent and load keys
+if ! ssh-add -l >/dev/null 2>&1; then
+    eval "$(ssh-agent -s)" >/dev/null
+    ssh-add >/dev/null 2>&1
+fi

@@ -1,0 +1,223 @@
+/**
+ * Nord Launcher – Spotlight Centered
+ *
+ * rofi -show drun -modi "drun,run,window" -show-icons \
+ *      -kb-element-next "" \
+ *      -kb-element-prev "" \
+ *      -kb-mode-next Tab \
+ *      -kb-mode-previous ISO_Left_Tab \
+ *      -theme ~/.config/rofi/nord-launcher.rasi
+ *
+ * For blur (hyprland): add `blur { enabled = true }` to your
+ * windowrule: `windowrulev2 = blur, class:^(rofi)$`
+ *
+ * For blur (picom): add `blur-background = true` and whitelist rofi
+ */
+
+/* ── Palette ─────────────────────────────── */
+* {
+    nord8:            #88C0D0;
+    nord9:            #81A1C1;
+    nord10:           #5E81AC;
+    nord11:           #BF616A;
+
+    /* Blur-friendly layers — lower alpha = more blur visible */
+    layer0:           rgba(35, 38, 46, 0.78);   /* window shell        */
+    layer1:           rgba(40, 44, 54, 0.72);   /* tab strip / listbg  */
+    layer3:           rgba(55, 62, 78, 0.92);   /* selected row        */
+
+    border-subtle:    rgba(136, 192, 208, 0.10);
+    border-active:    rgba(136, 192, 208, 0.25);
+
+    accent:           #88C0D0;
+    accent-dim:       #5E81AC;
+
+    fg:               #C8D0E0;
+    fg-bright:        #ECEFF4;
+    fg-dim:           #4E5A6E;
+    fg-tab-inactive:  #8892A4;   /* clearly readable but muted     */
+    fg-tab-active:    #ECEFF4;   /* bright white for active tab     */
+
+    urgent:           #BF616A;
+
+    font:             "JetBrainsMono Nerd Font Mono 12";
+    background-color: transparent;
+    text-color:       @fg;
+    border-color:     transparent;
+}
+
+/* ── Window ──────────────────────────────── */
+window {
+    location:         center;
+    anchor:           center;
+    width:            680px;
+    background-color: @layer0;
+    border:           1px solid;
+    border-color:     @border-active;
+    border-radius:    16px;
+    padding:          0px;
+    children:         [mainbox];
+}
+
+/* ── Mainbox ─────────────────────────────── */
+mainbox {
+    background-color: transparent;
+    spacing:          0px;
+    padding:          0px;
+    children:         [inputbar, mode-switcher, listview];
+}
+
+/* ── Input Bar ───────────────────────────── */
+inputbar {
+    background-color: transparent;
+    padding:          18px 20px 16px 20px;
+    spacing:          14px;
+    border-radius:    16px 16px 0px 0px;
+    children:         [prompt, entry, case-indicator];
+}
+
+prompt {
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Mono 15";
+    vertical-align:   0.5;
+}
+
+entry {
+    background-color: transparent;
+    text-color:       @fg-bright;
+    placeholder-color: @fg-dim;
+    placeholder:      "Search…";
+    vertical-align:   0.5;
+    cursor:           text;
+    font:             "JetBrainsMono Nerd Font Mono 14";
+}
+
+case-indicator {
+    text-color:       @fg-dim;
+    vertical-align:   0.5;
+    font:             "JetBrainsMono Nerd Font Mono 10";
+}
+
+/* ── Mode Switcher ───────────────────────── */
+mode-switcher {
+    orientation:      horizontal;
+    background-color: @layer1;
+    border-top:       1px solid;
+    border-bottom:    1px solid;
+    border-color:     @border-subtle;
+    padding:          0px 16px;
+    spacing:          0px;
+}
+
+/* Base button — inactive */
+button {
+    padding:          8px 24px;
+    border-radius:    0px;
+    border:           0px solid;
+    background-color: transparent;
+    text-color:       @fg-tab-inactive;
+    font:             "JetBrainsMono Nerd Font Mono 10";
+    cursor:           pointer;
+    horizontal-align: 0.5;
+}
+
+/* Active tab — background pill + bright text */
+button selected {
+    background-color: rgba(136, 192, 208, 0.12);
+    text-color:       @fg-tab-active;
+    border:           0px solid;
+    border-radius:    0px;
+}
+
+/* ── List View ───────────────────────────── */
+listview {
+    background-color: @layer1;
+    border-radius:    0px 0px 16px 16px;
+    padding:          6px 8px 10px 8px;
+    spacing:          1px;
+    lines:            7;
+    columns:          1;
+    dynamic:          false;
+    scrollbar:        false;
+    cycle:            true;
+}
+
+/* ── Elements ────────────────────────────── */
+element {
+    padding:          9px 12px 9px 10px;
+    border-radius:    8px;
+    background-color: transparent;
+    spacing:          14px;
+    orientation:      horizontal;
+    border:           0px solid;
+    border-left:      3px solid;
+    border-color:     transparent;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color:       @fg;
+    border-color:     transparent;
+}
+
+element normal.urgent {
+    background-color: transparent;
+    text-color:       @urgent;
+    border-color:     transparent;
+}
+
+element normal.active {
+    background-color: transparent;
+    text-color:       @accent;
+    border-color:     transparent;
+}
+
+element selected.normal {
+    background-color: @layer3;
+    text-color:       @fg-bright;
+    border-color:     @accent;
+}
+
+element selected.urgent {
+    background-color: rgba(191, 97, 106, 0.18);
+    text-color:       @urgent;
+    border-color:     @urgent;
+}
+
+element selected.active {
+    background-color: rgba(94, 129, 172, 0.20);
+    text-color:       @accent;
+    border-color:     @accent-dim;
+}
+
+element-icon {
+    background-color: inherit;
+    size:             24px;
+    vertical-align:   0.5;
+}
+
+element-text {
+    background-color: inherit;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    font:             "JetBrainsMono Nerd Font Mono 12";
+}
+
+/* ── Message / Error ─────────────────────── */
+message {
+    background-color: @layer1;
+    border-top:       1px solid;
+    border-color:     @border-subtle;
+    padding:          8px 20px;
+}
+
+textbox {
+    background-color: transparent;
+    text-color:       @accent;
+    font:             "JetBrainsMono Nerd Font Mono 11";
+}
+
+error-message {
+    background-color: @layer1;
+    padding:          8px 20px;
+}

@@ -25,4 +25,8 @@ configuration {
 
 //@theme "/home/sid/.config/rofi/themes/new-nord.rasi"
 
+//@theme "/home/sid/.config/rofi/themes/colloid-nord.rasi"
+
+//@theme "/home/sid/.config/rofi/themes/nord.rasi"
+
 @theme "/home/sid/.config/rofi/themes/colloid-nord.rasi"
