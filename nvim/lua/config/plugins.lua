@@ -165,6 +165,30 @@ require("lazy").setup({
       })
     end,
   },
+  
+  -- Auto pairs
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function()
+      require("nvim-autopairs").setup()
+    end,
+  },
 
+  -- Ruff format on save
+  {
+    "stevearc/conform.nvim",
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          python = { "ruff_format" },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
+      })
+    end,
+  },
   
 })
