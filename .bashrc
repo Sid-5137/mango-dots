@@ -218,7 +218,7 @@ alias activate='conda activate'
 alias deactivate='conda deactivate'
 
 # User-Specific / Project Aliases
-alias src="cd $HOME/mango-dots/"
+alias src="cd $HOME/dotfiles/"
 alias web='cd /var/www/html'
 alias linutil="curl -fsSL christitus.com/linux | sh"
 
@@ -598,3 +598,5 @@ if ! ssh-add -l >/dev/null 2>&1; then
     eval "$(ssh-agent -s)" >/dev/null
     ssh-add >/dev/null 2>&1
 fi
+
+export PATH=$PATH:/home/sid/.spicetify
