@@ -1,0 +1,79 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        "type": "kitty-direct",
+        "source": "~/.config/fastfetch/image.png",
+        "height": 15,
+        "width": 34,
+        "padding": {
+            "top": 1,
+            "left": 1
+        }
+    },
+    "display": {
+        "separator": " "
+    },
+    "modules": [
+        {
+            "key": "╔═══════════╗",
+            "type": "custom"
+        },
+        {
+            "key": "║ {#34}{icon} distro  {#keys}║",
+            "type": "os"
+        },
+        {
+            "key": "║ {#35} kernel  {#keys}║",
+            "type": "kernel"
+        },
+        {
+            "key": "║ {#36}󰇄 desktop {#keys}║",
+            "type": "wm"
+        },
+        {
+            "key": "║ {#31} term    {#keys}║",
+            "type": "terminal"
+        },
+        {
+            "key": "║ {#32} shell   {#keys}║",
+            "type": "shell"
+        },
+        {
+            "key": "║ {#33}󰍛 cpu     {#keys}║",
+            "type": "cpu",
+            "showPeCoreCount": true
+        },
+        {
+            "key": "║ {#34}󰍛 gpu     {#keys}║",
+            "type": "gpu",
+            "folders": "/"
+        },
+        {
+            "key": "║ {#35} memory  {#keys}║",
+            "type": "memory"
+        },
+        {
+            "key": "║ {#36} OS age  {#keys}║",
+            "type": "command",
+            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+
+        },
+        {
+            "key": "║ {#33}󰅐 uptime  {#keys}║",
+            "type": "uptime"
+        },
+        {
+            "key": "╠═══════════╣",
+            "type": "custom"
+        },
+        {
+            "key": "║ {#39} colors  {#keys}║",
+            "type": "colors",
+            "symbol": "circle"
+        },
+        {
+            "key": "╚═══════════╝",
+            "type": "custom"
+        }
+    ]
+}
